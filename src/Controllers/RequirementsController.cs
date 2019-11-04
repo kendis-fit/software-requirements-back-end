@@ -81,6 +81,31 @@ namespace SoftwareRequirements.Controllers
             return Ok();
         }
 
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateNameRequirement(int id, [FromBody]RequirementCreate requirementChange)
+        {
+            using (var transaction = await db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var requirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent != null);
+                    if (requirement == null)
+                        return NotFound();
+                    requirement.Name = requirementChange.Name;
+
+                    db.Requirements.Update(requirement);
+                    await db.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    return StatusCode(500);
+                }
+            }
+            return NoContent();
+        }
+
         private void RemoveChildren(Requirement requirement)
         {
             if (requirement.Requirements.Count > 0)
