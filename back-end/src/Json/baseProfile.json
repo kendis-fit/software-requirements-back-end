@@ -1,0 +1,242 @@
+[
+    {
+        "NameIndex": "I1",
+        "Name": "SRPQGI",
+        "Coefficients": [
+            {
+                "Name": "K1",
+                "Value": null
+            },
+            {
+                "Name": "K2",
+                "Value": null
+            }
+        ]
+    },
+    {
+        "NameIndex": "I2",
+        "Name": "SRPEQGI",
+        "Coefficients": [
+            {
+                "Name": "K1",
+                "Value": null
+            },
+            {
+                "Name": "K2",
+                "Value": null
+            },
+            {
+                "Name": "K3",
+                "Value": null
+            },
+            {
+                "Name": "K4",
+                "Value": null
+            },
+            {
+                "Name": "K5",
+                "Value": null
+            }
+        ]
+    },
+    {
+        "NameIndex": "I3",
+        "Name": "SRPSQI",
+        "Coefficients": [
+            {
+                "Name": "SRPTN",
+                "NameMetric": "M1",
+                "Value": null,
+                "Primitives": [
+                    {
+                        "Name": "SRPTRN",
+                        "Value": null
+                    },
+                    {
+                        "Name": "SRPTRQN",
+                        "Value": null
+                    }
+                ]
+            },
+            {
+                "Name": "SRPCFN",
+                "NameMetric": "M2",
+                "Value": null,
+                "Primitives": [
+                    {
+                        "Name": "SRPCFRN",
+                        "Value": null
+                    },
+                    {
+                        "Name": "SRPCFRQN",
+                        "Value": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "NameIndex": "I4",
+        "Name": "SRPCQI",
+        "Coefficients": [
+            {
+                "Name": "SRPCC",
+                "NameMetric": "M3",
+                "Value": null 
+            },
+            {
+                "Name": "SRPCOC",
+                "NameMetric": "M4",
+                "Value": null
+            },
+            {
+                "Name": "SRPAC",
+                "NameMetric": "M5",
+                "Value": null
+            },
+            {
+                "Name": "SRPBC",
+                "NameMetric": "M6",
+                "Value": null
+            },
+            {
+                "Name": "SRPFC",
+                "NameMetric": "M7",
+                "Value": null
+            },
+            {
+                "Name": "SRPCOMC",
+                "NameMetric": "M8",
+                "Value": null
+            },
+            {
+                "Name": "SRPCQ",
+                "NameMetric": "M9",
+                "Value": null,
+                "Primitives": [
+                    {
+                        "Name": "SRPPCQ",
+                        "Value": null
+                    },
+                    {
+                        "Name": "SRPACQ",
+                        "Value": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "NameIndex": "I5",
+        "Name": "SRPCFCQI",
+        "Coefficients": [
+            {
+                "Name": "SRPCFAC",
+                "NameMetric": "M10",
+                "Value": null
+            },
+            {
+                "Name": "SRPCFIC",
+                "NameMetric": "M11",
+                "Value": null
+            },
+            {
+                "Name": "SRPCFFC",
+                "NameMetric": "M12",
+                "Value": null
+            },
+            {
+                "Name": "SRPCFACC",
+                "NameMetric": "M13",
+                "Value": null
+            },
+            {
+                "Name": "SRPCFCQ",
+                "NameMetric": "M14",
+                "Value": null,
+                "Primitives": [
+                    {
+                        "Name": "SRPCFPCQ",
+                        "Value": null
+                    },
+                    {
+                        "Name": "SRPCFACQ",
+                        "Value": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "NameIndex": "I6",
+        "Name": "SRPAQI",
+        "Coefficients": [
+            {
+                "Name": "SRPVA",
+                "NameMetric": "M15",
+                "Value": null
+            },
+            {
+                "Name": "SRPCA",
+                "NameMetric": "M16",
+                "Value": null
+            },
+            {
+                "Name": "SRPIA",
+                "NameMetric": "M17",
+                "Value": null
+            },
+            {
+                "Name": "SRPAQ",
+                "NameMetric": "M18",
+                "Value": null,
+                "Primitives": [
+                    {
+                        "Name": "SRPPAQ",
+                        "Value": null
+                    },
+                    {
+                        "Name": "SRPAAQ",
+                        "Value": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "NameIndex": "I7",
+        "Name": "SRPCFAQI",
+        "Coefficients": [
+            {
+                "Name": "SRPCFSCA",
+                "NameMetric": "M19",
+                "Value": null
+            },
+            {
+                "Name": "SRPCFTTA",
+                "NameMetric": "M20",
+                "Value": null
+            },
+            {
+                "Name": "SRPCFAQ",
+                "NameMetric": "M21",
+                "Value": null,
+                "Primitives": [
+                    {
+                        "Name": "SRPCFPAQ",
+                        "Value": null
+                    },
+                    {
+                        "Name": "SRPCFAAQ",
+                        "Value": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "NameIndex": "I8",
+        "Name": "SRPIQGI",
+        "Coefficients": []
+    }
+]
