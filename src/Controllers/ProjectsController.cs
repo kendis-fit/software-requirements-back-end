@@ -101,5 +101,30 @@ namespace SoftwareRequirements.Controllers
             var requirementView = mapper.Map<Requirement, RequirementView>(project);
             return Ok(requirementView);
         }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateNameProject(int id, [FromBody]RequirementCreate projectChange)
+        {
+            using (var transaction = await db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var project = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent == null);
+                    if (project == null)
+                        return NotFound();
+                    project.Name = projectChange.Name;
+
+                    db.Requirements.Update(project);
+                    await db.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    return StatusCode(500);
+                }
+            }
+            return NoContent();
+        }
     }
 }
