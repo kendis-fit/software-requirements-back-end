@@ -126,5 +126,16 @@ namespace SoftwareRequirements.Controllers
             }
             return NoContent();
         }
+
+        [HttpGet("{id}/Profiles")]
+        public async Task<IActionResult> GetAllProfilesById(int id)
+        {
+            var project = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent == null);
+            if (project == null)
+                return NotFound();
+            
+            var profileListView = mapper.Map<Requirement, ProfileListView>(project);
+            return Ok(profileListView);
+        }
     }
 }

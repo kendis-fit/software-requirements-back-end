@@ -12,6 +12,7 @@ namespace SoftwareRequirements.Profiles
             CreateMap<Requirement, RequirementView>();
             CreateMap<Requirement, RequirementListView>();
             CreateMap<Requirement, ProfileView>();
+            CreateMap<Requirement, ProfileListView>();
         }
     }
 }
