@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace SoftwareRequirements.Migrations
 {
-    public partial class Init : Migration
+    public partial class ChangeType : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +15,7 @@ namespace SoftwareRequirements.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: true),
-                    Profile = table.Column<string>(nullable: true),
+                    Profile = table.Column<JsonDocument>(nullable: true),
                     ParentId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>

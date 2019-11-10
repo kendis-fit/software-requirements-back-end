@@ -1,8 +1,7 @@
-using System.Linq;
-using System;
 using System.IO;
-using System.Collections.Generic;
 using AutoMapper;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FileReader = System.IO.File;
@@ -41,7 +40,7 @@ namespace SoftwareRequirements.Controllers
                     {
                         Name = requirement.Name,
                         Parent = parentRequirement,
-                        Profile =  await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/profile.json")
+                        Profile = JsonDocument.Parse(await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/profile.json"))
                     };
 
                     await db.Requirements.AddAsync(newRequirement);

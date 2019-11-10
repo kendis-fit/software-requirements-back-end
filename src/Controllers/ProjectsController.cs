@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using AutoMapper;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace SoftwareRequirements.Controllers
                     var newProject = new Requirement()
                     {
                         Name = project.Name,
-                        Profile =  await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/baseProfile.json")
+                        Profile = JsonDocument.Parse(await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/baseProfile.json"))
                     };
 
                     await db.Requirements.AddAsync(newProject);

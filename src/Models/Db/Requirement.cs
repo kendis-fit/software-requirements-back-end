@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Collections.Generic;
 
 namespace SoftwareRequirements.Models.Db
@@ -8,7 +9,7 @@ namespace SoftwareRequirements.Models.Db
 
         public string Name { get; set; }
 
-        public string Profile { get; set; }
+        public JsonDocument Profile { get; set; }
 
         public int? ParentId { get; set; }
 
