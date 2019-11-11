@@ -36,11 +36,25 @@ namespace SoftwareRequirements.Controllers
                     if (parentRequirement == null)
                         return NotFound();
 
+                    JsonDocument profile = null;
+
+                    if (parentRequirement.Requirements.Count == 0 && parentRequirement.Parent != null)
+                    {
+                        profile = parentRequirement.Profile;
+                        parentRequirement.Profile = null;
+                        db.Requirements.Update(parentRequirement);
+                        await db.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        profile = JsonDocument.Parse(await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/profile.json"));
+                    }
+
                     var newRequirement = new Requirement()
                     {
                         Name = requirement.Name,
                         Parent = parentRequirement,
-                        Profile = JsonDocument.Parse(await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/profile.json"))
+                        Profile = profile
                     };
 
                     await db.Requirements.AddAsync(newRequirement);
