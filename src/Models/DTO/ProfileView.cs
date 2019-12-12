@@ -4,6 +4,6 @@ namespace SoftwareRequirements.Models.DTO
 {
     public class ProfileView
     {
-        public JsonDocument Profile { get; set; }
+        public string Profile { get; set; }
     }
 }

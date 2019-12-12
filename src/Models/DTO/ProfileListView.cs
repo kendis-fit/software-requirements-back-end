@@ -7,7 +7,7 @@ namespace SoftwareRequirements.Models.DTO
     {
         public string Name { get; set; }
 
-        public JsonDocument Profile { get; set; }
+        public string Profile { get; set; }
 
         public List<ProfileListView> Requirements { get; set; }
     }

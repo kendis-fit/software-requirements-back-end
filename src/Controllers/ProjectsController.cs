@@ -38,7 +38,7 @@ namespace SoftwareRequirements.Controllers
                     var newProject = new Requirement()
                     {
                         Name = project.Name,
-                        Profile = JsonDocument.Parse(await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/baseProfile.json"))
+                        Profile = await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/baseProfile.json")
                     };
 
                     await db.Requirements.AddAsync(newProject);
@@ -55,34 +55,13 @@ namespace SoftwareRequirements.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProjectById(int id)
-        {
-            var project = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent == null);
-            if (project == null)
-                return NotFound();
-
-            using (var transaction = await db.Database.BeginTransactionAsync())
-            {
-                try
-                {
-                    db.Requirements.Remove(project);
-                    await db.SaveChangesAsync();
-                    await transaction.CommitAsync();
-                }
-                catch
-                {
-                    await transaction.RollbackAsync();
-                    return StatusCode(500);
-                }
-            }
-            return Ok();
-        }
-
         [HttpGet]
-        public async Task<IActionResult> GetAllProjects()
+        public async Task<IActionResult> GetAllProjects([FromQuery]int offset, [FromQuery]int size)
         {
-            var projects = await db.Requirements.Where(r => r.Parent == null).ToListAsync();
+            if (size > 100)
+                return BadRequest();
+
+            var projects = await db.Requirements.Where(r => r.Parent == null).Skip(offset).Take(size).ToListAsync();
 
             if (projects.Count == 0)
                 return NotFound();

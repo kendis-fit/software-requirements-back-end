@@ -46,7 +46,7 @@ namespace SoftwareRequirements.Controllers
             {
                 try
                 {
-                    requirement.Profile = JsonDocument.Parse(profile);
+                    requirement.Profile = profile;
                     db.Requirements.Update(requirement);
                     await db.SaveChangesAsync();
                     await transaction.CommitAsync();

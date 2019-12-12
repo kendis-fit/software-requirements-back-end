@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System;
 using System.IO;
 using AutoMapper;
 using System.Linq;
@@ -6,8 +8,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FileReader = System.IO.File;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 using SoftwareRequirements.Db;
+using SoftwareRequirements.Models;
 using SoftwareRequirements.Models.Db;
 using SoftwareRequirements.Models.DTO;
 
@@ -36,7 +40,7 @@ namespace SoftwareRequirements.Controllers
                     if (parentRequirement == null)
                         return NotFound();
 
-                    JsonDocument profile = null;
+                    string profile = null;
 
                     if (parentRequirement.Requirements.Count == 0 && parentRequirement.Parent != null)
                     {
@@ -47,7 +51,41 @@ namespace SoftwareRequirements.Controllers
                     }
                     else
                     {
-                        profile = JsonDocument.Parse(await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/profile.json"));
+                        profile = await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/profile.json");
+                        
+                        var project = GetRoot(parentRequirement);
+
+                        string json = project.Profile;
+
+                        var projectProfile = JsonConvert.DeserializeObject<List<SoftwareRequirements.Models.Profile>>(json);
+                        var index = projectProfile.FirstOrDefault(i => i.NameIndex == "I8");
+                        if (index != null)
+                        {
+                            var coeff = index.Coefficients.LastOrDefault();
+                            string kIndex = null;
+                            if (coeff != null)
+                            {
+                                int firstIndexK = coeff.Name.IndexOf("K") + 1;
+                                int value = int.Parse(coeff.Name.Substring(firstIndexK)) + 1;
+
+                                kIndex = "K" + value;
+                            }
+                            else
+                            {
+                                kIndex = "K1";
+                            }
+                            index.Coefficients.Add(new Coefficient
+                            {
+                                Name = kIndex,
+                                Value = null
+                            });
+                        }
+                        string updateProfile = JsonConvert.SerializeObject(projectProfile);
+
+                        project.Profile = updateProfile;
+
+                        db.Requirements.Update(project);
+                        await db.SaveChangesAsync();
                     }
 
                     var newRequirement = new Requirement()
@@ -63,7 +101,7 @@ namespace SoftwareRequirements.Controllers
 
                     return Created($"/profiles/{newRequirement.Id}", newRequirement.Id);
                 }
-                catch
+                catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
                     return StatusCode(500);
@@ -74,7 +112,7 @@ namespace SoftwareRequirements.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRequirementById(int id)
         {
-            var requirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent != null);
+            var requirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id);
             if (requirement == null)
                 return NotFound();
 
@@ -82,6 +120,9 @@ namespace SoftwareRequirements.Controllers
             {
                 try
                 {
+                    var project = GetRoot(requirement);
+                    // TO DO: Remove coeff from profile of a project
+
                     RemoveChildren(requirement);
                     await transaction.CommitAsync();
                 }
@@ -130,6 +171,13 @@ namespace SoftwareRequirements.Controllers
             }
             db.Requirements.Remove(requirement);
             db.SaveChanges();
+        }
+
+        private Requirement GetRoot(Requirement requirement)
+        {
+            if (requirement.Parent == null)
+                return requirement;
+            return GetRoot(requirement.Parent);
         }
     }
 }

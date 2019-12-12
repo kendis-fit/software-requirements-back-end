@@ -1,5 +1,5 @@
-using System.Text.Json;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SoftwareRequirements.Models.Db
 {
@@ -9,7 +9,8 @@ namespace SoftwareRequirements.Models.Db
 
         public string Name { get; set; }
 
-        public JsonDocument Profile { get; set; }
+        [Column(TypeName = "jsonb")]
+        public string Profile { get; set; }
 
         public int? ParentId { get; set; }
 
