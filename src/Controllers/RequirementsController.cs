@@ -32,80 +32,78 @@ namespace SoftwareRequirements.Controllers
         [HttpPost("{parentId}")]
         public async Task<IActionResult> CreateRequirements(int parentId, [FromBody]RequirementCreate requirement)
         {
-            using (var transaction = await db.Database.BeginTransactionAsync())
+            using var transaction = await db.Database.BeginTransactionAsync();
+            try
             {
-                try
+                var parentRequirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == parentId);
+                if (parentRequirement == null)
+                    return NotFound();
+
+                string profile = null;
+
+                if (parentRequirement.Requirements.Count == 0 && parentRequirement.Parent != null)
                 {
-                    var parentRequirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == parentId);
-                    if (parentRequirement == null)
-                        return NotFound();
-
-                    string profile = null;
-
-                    if (parentRequirement.Requirements.Count == 0 && parentRequirement.Parent != null)
-                    {
-                        profile = parentRequirement.Profile;
-                        parentRequirement.Profile = null;
-                        db.Requirements.Update(parentRequirement);
-                        await db.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        profile = await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/profile.json");
-                        
-                        var project = GetRoot(parentRequirement);
-
-                        string json = project.Profile;
-
-                        var projectProfile = JsonConvert.DeserializeObject<List<SoftwareRequirements.Models.Profile>>(json);
-                        var index = projectProfile.FirstOrDefault(i => i.NameIndex == "I8");
-                        if (index != null)
-                        {
-                            var coeff = index.Coefficients.LastOrDefault();
-                            string kIndex = null;
-                            if (coeff != null)
-                            {
-                                int firstIndexK = coeff.Name.IndexOf("K") + 1;
-                                int value = int.Parse(coeff.Name.Substring(firstIndexK)) + 1;
-
-                                kIndex = "K" + value;
-                            }
-                            else
-                            {
-                                kIndex = "K1";
-                            }
-                            index.Coefficients.Add(new Coefficient
-                            {
-                                Name = kIndex,
-                                Value = null
-                            });
-                        }
-                        string updateProfile = JsonConvert.SerializeObject(projectProfile);
-
-                        project.Profile = updateProfile;
-
-                        db.Requirements.Update(project);
-                        await db.SaveChangesAsync();
-                    }
-
-                    var newRequirement = new Requirement()
-                    {
-                        Name = requirement.Name,
-                        Parent = parentRequirement,
-                        Profile = profile
-                    };
-
-                    await db.Requirements.AddAsync(newRequirement);
+                    profile = parentRequirement.Profile;
+                    parentRequirement.Profile = null;
+                    db.Requirements.Update(parentRequirement);
                     await db.SaveChangesAsync();
-                    await transaction.CommitAsync();
-
-                    return Created($"/profiles/{newRequirement.Id}", newRequirement.Id);
                 }
-                catch (Exception ex)
+                else
                 {
-                    await transaction.RollbackAsync();
-                    return StatusCode(500);
+                    profile = await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/profile.json");
+                    
+                    var project = GetRoot(parentRequirement);
+
+                    string json = project.Profile;
+
+                    var projectProfile = JsonConvert.DeserializeObject<List<SoftwareRequirements.Models.Profile>>(json);
+                    var index = projectProfile.FirstOrDefault(i => i.NameIndex == "I8");
+                    if (index != null)
+                    {
+                        var coeff = index.Coefficients.LastOrDefault();
+                        string kIndex = null;
+                        if (coeff != null)
+                        {
+                            int firstIndexK = coeff.Name.IndexOf("K") + 1;
+                            int value = int.Parse(coeff.Name.Substring(firstIndexK)) + 1;
+
+                            kIndex = "K" + value;
+                        }
+                        else
+                        {
+                            kIndex = "K1";
+                        }
+                        index.Coefficients.Add(new Coefficient
+                        {
+                            Name = kIndex,
+                            Value = null
+                        });
+                    }
+                    string updateProfile = JsonConvert.SerializeObject(projectProfile);
+
+                    project.Profile = updateProfile;
+
+                    db.Requirements.Update(project);
+                    await db.SaveChangesAsync();
                 }
+
+                var newRequirement = new Requirement()
+                {
+                    Name = requirement.Name,
+                    Parent = parentRequirement,
+                    Profile = profile
+                };
+
+                await db.Requirements.AddAsync(newRequirement);
+                await db.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Created($"/profiles/{newRequirement.Id}", newRequirement.Id);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500);
             }
         }
 
@@ -116,21 +114,19 @@ namespace SoftwareRequirements.Controllers
             if (requirement == null)
                 return NotFound();
 
-            using (var transaction = await db.Database.BeginTransactionAsync())
+            using var transaction = await db.Database.BeginTransactionAsync();
+            try
             {
-                try
-                {
-                    var project = GetRoot(requirement);
-                    // TO DO: Remove coeff from profile of a project
+                var project = GetRoot(requirement);
+                // TO DO: Remove coeff from profile of a project
 
-                    RemoveChildren(requirement);
-                    await transaction.CommitAsync();
-                }
-                catch
-                {
-                    await transaction.RollbackAsync();
-                    return StatusCode(500);
-                }
+                RemoveChildren(requirement);
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500);
             }
             return Ok();
         }
@@ -138,24 +134,22 @@ namespace SoftwareRequirements.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateNameRequirement(int id, [FromBody]RequirementCreate requirementChange)
         {
-            using (var transaction = await db.Database.BeginTransactionAsync())
+            using var transaction = await db.Database.BeginTransactionAsync();
+            try
             {
-                try
-                {
-                    var requirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent != null);
-                    if (requirement == null)
-                        return NotFound();
-                    requirement.Name = requirementChange.Name;
+                var requirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent != null);
+                if (requirement == null)
+                    return NotFound();
+                requirement.Name = requirementChange.Name;
 
-                    db.Requirements.Update(requirement);
-                    await db.SaveChangesAsync();
-                    await transaction.CommitAsync();
-                }
-                catch
-                {
-                    await transaction.RollbackAsync();
-                    return StatusCode(500);
-                }
+                db.Requirements.Update(requirement);
+                await db.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500);
             }
             return NoContent();
         }

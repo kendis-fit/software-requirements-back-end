@@ -16,6 +16,14 @@ namespace SoftwareRequirements.Models.Db
 
         public virtual Requirement Parent { get; set; }
 
-        public virtual List<Requirement> Requirements { get; set; }   
+        public virtual List<Requirement> Requirements { get; set; }
+
+        public RequirementWrite Write { get; set; }
+    }
+
+    public enum RequirementWrite
+    {
+        CREATED = 0,
+        DONE = 1
     }
 }

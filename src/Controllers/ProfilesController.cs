@@ -42,20 +42,20 @@ namespace SoftwareRequirements.Controllers
             if (requirement == null)
                 return NotFound();
 
-            using (var transaction = await db.Database.BeginTransactionAsync())
+            using var transaction = await db.Database.BeginTransactionAsync();
+            
+            try
             {
-                try
-                {
-                    requirement.Profile = profile;
-                    db.Requirements.Update(requirement);
-                    await db.SaveChangesAsync();
-                    await transaction.CommitAsync();
-                }
-                catch
-                {
-                    await transaction.RollbackAsync();
-                    return StatusCode(500);
-                }
+                requirement.Profile = profile;
+                requirement.Write = RequirementWrite.DONE;
+                db.Requirements.Update(requirement);
+                await db.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500);
             }
             return Ok();
         }

@@ -8,10 +8,10 @@ namespace SoftwareRequirements.Models
         [Required]
         public string Name { get; set; }
 
-        public int? Value { get; set; }
+        public float? Value { get; set; }
 
-        public string? NameIndex { get; set; }
+        public string NameIndex { get; set; }
 
-        public List<Primitive>? Primitives { get; set; }
+        public List<Primitive> Primitives { get; set; }
     }
 }

@@ -31,27 +31,26 @@ namespace SoftwareRequirements.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProject([FromBody]RequirementCreate project)
         {
-            using (var transaction = await db.Database.BeginTransactionAsync())
+            using var transaction = await db.Database.BeginTransactionAsync();
+            try
             {
-                try
+                var newProject = new Requirement()
                 {
-                    var newProject = new Requirement()
-                    {
-                        Name = project.Name,
-                        Profile = await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/baseProfile.json")
-                    };
+                    Name = project.Name,
+                    Profile = await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/baseProfile.json"),
+                    Write = RequirementWrite.CREATED
+                };
 
-                    await db.Requirements.AddAsync(newProject);
-                    await db.SaveChangesAsync();
-                    await transaction.CommitAsync();
+                await db.Requirements.AddAsync(newProject);
+                await db.SaveChangesAsync();
+                await transaction.CommitAsync();
 
-                    return Created($"/profiles/{newProject.Id}", newProject.Id);
-                }
-                catch
-                {
-                    await transaction.RollbackAsync();
-                    return StatusCode(500);
-                }
+                return Created($"/profiles/{newProject.Id}", newProject.Id);
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500);
             }
         }
 
@@ -85,24 +84,22 @@ namespace SoftwareRequirements.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateNameProject(int id, [FromBody]RequirementCreate projectChange)
         {
-            using (var transaction = await db.Database.BeginTransactionAsync())
+            using var transaction = await db.Database.BeginTransactionAsync();
+            try
             {
-                try
-                {
-                    var project = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent == null);
-                    if (project == null)
-                        return NotFound();
-                    project.Name = projectChange.Name;
+                var project = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent == null);
+                if (project == null)
+                    return NotFound();
+                project.Name = projectChange.Name;
 
-                    db.Requirements.Update(project);
-                    await db.SaveChangesAsync();
-                    await transaction.CommitAsync();
-                }
-                catch
-                {
-                    await transaction.RollbackAsync();
-                    return StatusCode(500);
-                }
+                db.Requirements.Update(project);
+                await db.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500);
             }
             return NoContent();
         }

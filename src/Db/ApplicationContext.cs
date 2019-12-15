@@ -13,6 +13,7 @@ namespace SoftwareRequirements.Db
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Requirement>().HasMany(r => r.Requirements);
+            modelBuilder.Entity<Requirement>().Property(r => r.Write).HasDefaultValue(RequirementWrite.CREATED);
         }
     } 
 }
