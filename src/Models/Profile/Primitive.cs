@@ -1,4 +1,4 @@
-namespace SoftwareRequirements.Models
+namespace SoftwareRequirements.Models.Profile
 {
     class Primitive
     {

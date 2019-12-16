@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 using SoftwareRequirements.Db;
-using SoftwareRequirements.Models;
 using SoftwareRequirements.Models.Db;
 using SoftwareRequirements.Models.DTO;
+using SoftwareRequirements.Models.Profile;
 
 namespace SoftwareRequirements.Controllers
 {
@@ -56,7 +56,7 @@ namespace SoftwareRequirements.Controllers
 
                     string json = project.Profile;
 
-                    var projectProfile = JsonConvert.DeserializeObject<List<SoftwareRequirements.Models.Profile>>(json);
+                    var projectProfile = JsonConvert.DeserializeObject<List<SoftwareRequirements.Models.Profile.Profile>>(json);
                     var index = projectProfile.FirstOrDefault(i => i.NameIndex == "I8");
                     if (index != null)
                     {

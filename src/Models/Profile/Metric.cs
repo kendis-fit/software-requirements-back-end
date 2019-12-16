@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SoftwareRequirements.Models
+namespace SoftwareRequirements.Models.Profile
 {
-    class Coefficient
+    class Metric
     {
         [Required]
         public string Name { get; set; }
 
-        public float? Value { get; set; }
+        public string NameMetric { get; set; }
 
-        public string NameIndex { get; set; }
+        public float? Value { get; set; }
 
         public List<Primitive> Primitives { get; set; }
     }

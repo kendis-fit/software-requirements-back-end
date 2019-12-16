@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SoftwareRequirements.Models
+namespace SoftwareRequirements.Models.Profile
 {
     class Profile
     {
