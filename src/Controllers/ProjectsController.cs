@@ -116,16 +116,9 @@ namespace SoftwareRequirements.Controllers
             
             var profileListView = mapper.Map<Requirement, ProfileListView>(project);
 
-            int countI8 = 0;
-            CountI8(profileListView, ref countI8);
+            var profiles = JsonSerializer.Deserialize<List<Models.Profile.Profile>>(profileListView.Profile);
 
-            List<ConnectResult> I8 = new List<ConnectResult>();
-            for (int i = 0; i < countI8; ++i)
-            {
-                I8.Add(new ConnectResult { Coefficient = "K1", Index = "I9" });
-            }
-
-            Dictionary<string, List<ConnectResult>> connect = new Dictionary<string, List<ConnectResult>>
+            Dictionary<string, List<ConnectResult>> baseConnect = new Dictionary<string, List<ConnectResult>>
             {
                 { "I1", new List<ConnectResult>
                     {
@@ -141,9 +134,11 @@ namespace SoftwareRequirements.Controllers
                         new ConnectResult { Coefficient = "K4", Index = "I6" },
                         new ConnectResult { Coefficient = "K5", Index = "I7" }
                     }
-                },
-                { "I8", I8
-                },
+                }
+            };
+
+            Dictionary<string, List<ConnectResult>> connect = new Dictionary<string, List<ConnectResult>>
+            {
                 { "I9", new List<ConnectResult>
                     {
                         new ConnectResult { Coefficient = "K1", Index = "I10" },
@@ -166,37 +161,56 @@ namespace SoftwareRequirements.Controllers
                 }
             };
 
-            var profileResult = GetProfileResult(profiles, connect, "I1");
+            var projectProfileResult = GetProfileResult(profiles, baseConnect, "I1");
 
-            return Ok(profileResult);
+            var requirementProfileResult = projectProfileResult.ProfileResults.FirstOrDefault(p => p.Name == "I8");
+
+            var i8 = GetI8(profiles);
+
+            foreach (var coeff in i8.Coefficients.Select((value, i) => new { value, i}))
+            {
+                int count = 0;
+                var requirementProfile = new List<Models.Profile.Profile>();
+                GetRequiremetProfile(profileListView, coeff.i + 1, ref count, ref requirementProfile);
+                var profileResult = GetProfileResult(requirementProfile, connect, "I9");
+                profileResult.Coeff = coeff.value.Value;
+                requirementProfileResult.ProfileResults.Add(profileResult);
+            }
+
+            // TO DO: you need to use the object projectProfileResult to calculate, after you need to put your float number(result)
+            // into function Ok instead of variable projectProfileResult 
+
+            return Ok(projectProfileResult);
         }
 
-        private void CountI8(ProfileListView listView, ref int count)
+        private Models.Profile.Profile GetI8(List<Models.Profile.Profile> profiles)
         {
-            if (listView.Requirements == null || listView.Requirements.Count == 0)
-                return;
-            if (!string.IsNullOrEmpty(listView.Profile))
+            return profiles.FirstOrDefault(p => p.NameIndex == "I8");
+        }
+
+        private void GetRequiremetProfile(ProfileListView listView, int index, ref int count, ref List<Models.Profile.Profile> profile)
+        {
+            if (index == count)
             {
-                ++count;
+                profile = JsonSerializer.Deserialize<List<Models.Profile.Profile>>(listView.Profile);
             }
+
             foreach (var requirement in listView.Requirements)
             {
-                CountI8(requirement, ref count);
+                if (!string.IsNullOrEmpty(requirement.Profile)) ++count;
+                GetRequiremetProfile(requirement, index, ref count, ref profile);
             }
-        }
+        } 
 
-        private ProfileResult GetProfileResult(ProfileListView profileListView, Dictionary<string, List<ConnectResult>> connect, string index)
+        private ProfileResult GetProfileResult(List<Models.Profile.Profile> profiles, Dictionary<string, List<ConnectResult>> connect, string index)
         {
             ProfileResult result = null;
             result = new ProfileResult();
             result.Name = index;
             result.ProfileResults = new List<ProfileResult>();
 
-            var profiles = JsonSerializer.Deserialize<List<Models.Profile.Profile>>(profileListView.Profile);
-
             if (!connect.ContainsKey(index))
             {
-
                 var profile = profiles.FirstOrDefault(p => p.NameIndex == index);
                 foreach (var coeff in profile.Coefficients)
                 {
@@ -208,13 +222,22 @@ namespace SoftwareRequirements.Controllers
             {
                 foreach (var test in connect[index])
                 {
-                    var profile = GetProfileResult(profileListView, connect, test.Index);
+                    ProfileResult profile = null;
+                    if (test.Index != "I8")
+                    {
+                        profile = GetProfileResult(profiles, connect, test.Index);
+                    }
+                    else
+                    {
+                        profile = new ProfileResult();
+                        profile.Name = test.Index;
+                        profile.ProfileResults = new List<ProfileResult>();
+                    }
                     profile.Coeff = profiles.FirstOrDefault(p => p.NameIndex == index).Coefficients.FirstOrDefault(c => c.Name == test.Coefficient).Value;
-                    result.ProfileResults.Add(profile);
+                    result.ProfileResults.Add(profile);   
                 }
+
             }
-            
-            
             return result;
         }
 
