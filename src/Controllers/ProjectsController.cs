@@ -180,9 +180,24 @@ namespace SoftwareRequirements.Controllers
             // TO DO: you need to use the object projectProfileResult to calculate, after you need to put your float number(result)
             // into function Ok instead of variable projectProfileResult 
 
+            calculateStuff(projectProfileResult);
+
             return Ok(projectProfileResult);
         }
 
+        private float calculateStuff(ProfileResult res)
+        {
+            if(res.Value != null) return res.Value.Value * res.Coeff.Value;
+            else {
+                var results = new List<float>();
+                foreach(ProfileResult r in res.ProfileResults) {
+                    float result = calculateStuff(r);
+                    results.Add(result);
+                }
+
+                return results.Sum();
+            }
+        }
         private Models.Profile.Profile GetI8(List<Models.Profile.Profile> profiles)
         {
             return profiles.FirstOrDefault(p => p.NameIndex == "I8");
