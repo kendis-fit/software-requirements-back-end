@@ -177,12 +177,9 @@ namespace SoftwareRequirements.Controllers
                 requirementProfileResult.ProfileResults.Add(profileResult);
             }
 
-            // TO DO: you need to use the object projectProfileResult to calculate, after you need to put your float number(result)
-            // into function Ok instead of variable projectProfileResult 
+            float result = calculateStuff(projectProfileResult);
 
-            calculateStuff(projectProfileResult);
-
-            return Ok(projectProfileResult);
+            return Ok(result);
         }
 
         private float calculateStuff(ProfileResult res)
