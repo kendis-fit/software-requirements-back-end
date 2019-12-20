@@ -30,7 +30,7 @@ namespace SoftwareRequirements
 
         public Startup()
         {
-            connectionString = Environment.GetEnvironmentVariable("CONNECTION_DB_SR");
+            connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
         }
 
         public void ConfigureServices(IServiceCollection services)
