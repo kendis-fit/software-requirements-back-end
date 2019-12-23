@@ -154,6 +154,13 @@ namespace SoftwareRequirements.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id}/Result")]
+        public async Task<IActionResult> GetResult(int id)
+        {
+            
+            return Ok();
+        }
+
         private void RemoveChildren(Requirement requirement)
         {
             if (requirement.Requirements.Count > 0)

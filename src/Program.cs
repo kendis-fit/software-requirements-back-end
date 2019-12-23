@@ -20,10 +20,7 @@ namespace SoftwareRequirements
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    string port = Environment.GetEnvironmentVariable("PORT") ?? "5001";
-
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls($"http//*:{port}");
                 });
     }
 }

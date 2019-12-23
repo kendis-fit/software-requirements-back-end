@@ -165,7 +165,7 @@ namespace SoftwareRequirements.Controllers
 
             var requirementProfileResult = projectProfileResult.ProfileResults.FirstOrDefault(p => p.Name == "I8");
 
-            var i8 = GetI8(profiles);
+            var i8 = profiles.FirstOrDefault(p => p.NameIndex == "I8");
 
             foreach (var coeff in i8.Coefficients.Select((value, i) => new { value, i}))
             {
@@ -194,10 +194,6 @@ namespace SoftwareRequirements.Controllers
 
                 return results.Sum();
             }
-        }
-        private Models.Profile.Profile GetI8(List<Models.Profile.Profile> profiles)
-        {
-            return profiles.FirstOrDefault(p => p.NameIndex == "I8");
         }
 
         private void GetRequiremetProfile(ProfileListView listView, int index, ref int count, ref List<Models.Profile.Profile> profile)
