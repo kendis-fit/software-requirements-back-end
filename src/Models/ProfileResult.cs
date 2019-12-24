@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 namespace SoftwareRequirements.Models
 {
-    class ProfileResult
+    public class ProfileResult
     {
         public string Name { get; set; }
 

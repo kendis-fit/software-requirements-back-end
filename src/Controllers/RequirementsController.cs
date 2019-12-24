@@ -154,10 +154,13 @@ namespace SoftwareRequirements.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}/Result")]
-        public async Task<IActionResult> GetResult(int id)
+        [HttpGet("{id}/Coefficients/{coeffId}")]
+        public async Task<IActionResult> GetResult(int id, string coeffId)
         {
-            
+            var requirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent != null);
+            if (requirement == null)
+                return NotFound();
+
             return Ok();
         }
 

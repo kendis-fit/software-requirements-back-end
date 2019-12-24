@@ -15,6 +15,7 @@ using SoftwareRequirements.Models;
 using SoftwareRequirements.Profiles;
 using SoftwareRequirements.Models.Db;
 using SoftwareRequirements.Models.DTO;
+using SoftwareRequirements.Helpers.Algorithm;
 
 namespace SoftwareRequirements.Controllers
 {
@@ -107,8 +108,8 @@ namespace SoftwareRequirements.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}/Profiles")]
-        public async Task<IActionResult> GetAllProfilesById(int id)
+        [HttpGet("{id}/Coefficients/{coeffId}")]
+        public async Task<IActionResult> GetAllProfilesById(int id, string coeffId)
         {
             var project = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent == null);
             if (project == null)
@@ -161,7 +162,7 @@ namespace SoftwareRequirements.Controllers
                 }
             };
 
-            var projectProfileResult = GetProfileResult(profiles, baseConnect, "I1");
+            var projectProfileResult = GetProfileResult(profiles, baseConnect, coeffId);
 
             var requirementProfileResult = projectProfileResult.ProfileResults.FirstOrDefault(p => p.Name == "I8");
 
@@ -177,23 +178,10 @@ namespace SoftwareRequirements.Controllers
                 requirementProfileResult.ProfileResults.Add(profileResult);
             }
 
-            float result = calculateStuff(projectProfileResult);
+            ICalculateProfile calculateProfile = new CalculateProfile(projectProfileResult);
 
+            float result = calculateProfile.Calculate();
             return Ok(result);
-        }
-
-        private float calculateStuff(ProfileResult res)
-        {
-            if(res.Value != null) return res.Value.Value * res.Coeff.Value;
-            else {
-                var results = new List<float>();
-                foreach(ProfileResult r in res.ProfileResults) {
-                    float result = calculateStuff(r);
-                    results.Add(result);
-                }
-
-                return results.Sum();
-            }
         }
 
         private void GetRequiremetProfile(ProfileListView listView, int index, ref int count, ref List<Models.Profile.Profile> profile)
