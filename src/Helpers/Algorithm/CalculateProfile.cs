@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-using SoftwareRequirements.Models;
+using SoftwareRequirements.Helpers.Converter.Structs.Result;
 
 namespace SoftwareRequirements.Helpers.Algorithm
 {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace SoftwareRequirements.Models.Profile
 {
-    class Profile
+    public class Profile
     {
         public string NameIndex { get; set; }
 

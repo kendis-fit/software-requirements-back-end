@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SoftwareRequirements.Models.Profile
 {
-    class Coefficient
+    public class Coefficient
     {
         [Required]
         public string Name { get; set; }

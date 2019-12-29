@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SoftwareRequirements.Models.Profile
 {
-    class Metric
+    public class Metric
     {
         [Required]
         public string Name { get; set; }

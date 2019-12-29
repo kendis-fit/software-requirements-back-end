@@ -1,6 +1,6 @@
 namespace SoftwareRequirements.Models.Profile
 {
-    class Primitive
+    public class Primitive
     {
         public string Name { get; set; }
 
