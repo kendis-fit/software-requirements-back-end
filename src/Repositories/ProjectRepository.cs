@@ -1,17 +1,25 @@
 using System;
-using AutoMapper;
 using System.IO;
+using AutoMapper;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 using SoftwareRequirements.Db;
 using SoftwareRequirements.Models.Db;
 using SoftwareRequirements.Models.DTO;
+using SoftwareRequirements.Helpers.Converter;
+using SoftwareRequirements.Helpers.Algorithm;
 using SoftwareRequirements.Repositories.Interfaces;
+using System.Collections.Generic;
 
 namespace SoftwareRequirements.Repositories
 {
-    public class ProjectRepository : ISearchableRepository<Task<RequirementView>, int>, ICreatableRepository<RequirementCreate>
+    public class ProjectRepository : 
+        ICalculableProfileRepository,
+        ISearchableRepository<Task<Requirement>, int>,
+        ISelectableRepository<Task<List<RequirementListView>>>,
+        ICreatableRepository<Task<Requirement>,RequirementCreate>
     {
         private readonly IMapper mapper;
         private readonly ApplicationContext db;
@@ -22,25 +30,14 @@ namespace SoftwareRequirements.Repositories
             this.mapper = mapper;
         }
 
-        public async Task<RequirementView> FindById(int id)
+        public async Task<Requirement> Create(RequirementCreate project)
         {
-            var project = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent == null);
+            var newProject = new Requirement();
 
-            if (project == null)
-            {
-                return null;
-            }
-
-            var requirementView = mapper.Map<Requirement, RequirementView>(project);
-            return requirementView;
-        }
-
-        public async void Create(RequirementCreate project)
-        {
             using var transaction = await db.Database.BeginTransactionAsync();
             try
             {
-                var newProject = new Requirement()
+                newProject = new Requirement()
                 {
                     Name = project.Name,
                     Profile = await File.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/baseProfile.json"),
@@ -54,8 +51,39 @@ namespace SoftwareRequirements.Repositories
             catch
             {
                 await transaction.RollbackAsync();
-                throw new Exception("");
+                throw new Exception("DB Failed");
             }
-        } 
+            return newProject;
+        }
+
+        public float Calculate(Requirement project, string indexId)
+        {
+            var profileListView = mapper.Map<Requirement, ProfileListView>(project);
+
+            var profileConverter = new ProfileConverter(profileListView, indexId);
+            var projectProfileResult = profileConverter.Convert(); 
+
+            float result = new CalculateProfile(projectProfileResult).Calculate();
+            return result;
+        }
+
+        public async Task<List<RequirementListView>> GetAll(int offset, int size)
+        {
+            var projects = await db.Requirements.Where(r => r.Parent == null).Skip(offset).Take(size).ToListAsync();
+
+            var projectList = mapper.Map<List<Requirement>, List<RequirementListView>>(projects);
+            return projectList;
+        }
+
+        public async Task<Requirement> FindById(int id)
+        {
+            var project = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent == null);
+
+            if (project == null)
+            {
+                return null;
+            }
+            return project;
+        }
     }
 }

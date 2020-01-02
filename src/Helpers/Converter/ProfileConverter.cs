@@ -41,12 +41,21 @@ namespace SoftwareRequirements.Helpers.Converter
         {
             var resultIndex = new ResultIndex(repository, connector, index.Item2);
             var result = resultIndex.Create();
-            if (index.Item1 == 1)
+            if (index.Item1 == 1 || index.Item1 == 8)
             {
                 var connectorProfile = new ConnectorProfile();
 
-                var requirementProfileResult = result.ProfileResults.FirstOrDefault(p => p.Name == "I8");
+                ProfileResult requirementProfileResult = new ProfileResult();
 
+                if (index.Item1 == 1)
+                {
+                    requirementProfileResult = result.ProfileResults.FirstOrDefault(p => p.Name == "I8");
+                }
+                else
+                {
+                    requirementProfileResult = result;
+                }
+        
                 var i8 = repository.FindById("I8");
 
                 foreach (var coeff in i8.Coefficients.Select((value, i) => new { value, i}))

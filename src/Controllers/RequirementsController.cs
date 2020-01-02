@@ -14,6 +14,8 @@ using SoftwareRequirements.Db;
 using SoftwareRequirements.Models.Db;
 using SoftwareRequirements.Models.DTO;
 using SoftwareRequirements.Models.Profile;
+using SoftwareRequirements.Helpers.Algorithm;
+using SoftwareRequirements.Helpers.Converter;
 
 namespace SoftwareRequirements.Controllers
 {
@@ -117,10 +119,34 @@ namespace SoftwareRequirements.Controllers
             using var transaction = await db.Database.BeginTransactionAsync();
             try
             {
-                var project = GetRoot(requirement);
-                // TO DO: Remove coeff from profile of a project
+                if (requirement.ParentId == null)
+                {
+                    RemoveChildren(requirement);
+                }
+                else
+                {
+                    var project = GetRoot(requirement);
 
-                RemoveChildren(requirement);
+                    int countRemoved = 0;
+                    RemoveChildren(requirement, ref countRemoved);
+
+                    string json = project.Profile;
+
+                    var projectProfile = JsonConvert.DeserializeObject<List<SoftwareRequirements.Models.Profile.Profile>>(json);                
+        
+                    var index = projectProfile.FirstOrDefault(i => i.NameIndex == "I8");
+                    if (index != null)
+                    {
+                        int lengthCoeffs = index.Coefficients.Count;
+                        int lengthRemoved = countRemoved;
+
+                        index.Coefficients = index.Coefficients.Take(lengthCoeffs - lengthRemoved).ToList();
+                        project.Profile = JsonConvert.SerializeObject(projectProfile);
+                    }
+                    db.Requirements.Update(project);
+                    await db.SaveChangesAsync();
+
+                }
                 await transaction.CommitAsync();
             }
             catch
@@ -154,19 +180,20 @@ namespace SoftwareRequirements.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}/Coefficients/{coeffId}")]
-        public async Task<IActionResult> GetResult(int id, string coeffId)
+        [HttpGet("{id}/Indexes/{indexId}")]
+        public async Task<IActionResult> GetResult(int id, string indexId)
         {
             var requirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent != null);
             if (requirement == null)
                 return NotFound();
 
-            if (coeffId != "I9")
-            {
-                
-            }
+            var profileListView = mapper.Map<Requirement, ProfileListView>(requirement);
 
-            return Ok();
+            var profileConverter = new ProfileConverter(profileListView, indexId);
+            var projectProfileResult = profileConverter.Convert(); 
+
+            float result = new CalculateProfile(projectProfileResult).Calculate();
+            return Ok(result);
         }
 
         private void RemoveChildren(Requirement requirement)
@@ -177,6 +204,25 @@ namespace SoftwareRequirements.Controllers
                 {
                     RemoveChildren(child);
                 }
+            }
+            db.Requirements.Remove(requirement);
+            db.SaveChanges();
+        }
+
+        private void RemoveChildren(Requirement requirement, ref int countRemoved)
+        {
+            bool isGroup() => string.IsNullOrEmpty(requirement.Profile);
+
+            if (requirement.Requirements.Count > 0)
+            {
+                foreach (var child in requirement.Requirements.ToList())
+                {
+                    RemoveChildren(child, ref countRemoved);
+                }
+            }
+            if (!isGroup())
+            {
+                ++countRemoved;
             }
             db.Requirements.Remove(requirement);
             db.SaveChanges();

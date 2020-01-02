@@ -25,7 +25,11 @@ namespace SoftwareRequirements.Helpers.Converter
             result.Name = index;
             result.ProfileResults = new List<ProfileResult>();
 
-            if (!connector.ContainsKey(index))
+            if (index == "I8")
+            {
+                result.Coeff = repository.GetCoefficientValue("I1", "K2");
+            }
+            else if (!connector.ContainsKey(index))
             {
                 var profile = repository.FindById(index);
                 foreach (var coeff in profile.Coefficients)
@@ -40,20 +44,10 @@ namespace SoftwareRequirements.Helpers.Converter
                 foreach (var test in connector[index])
                 {
                     ProfileResult profile = new ProfileResult();
-                    if (test.Index != "I8")
-                    {
-                        profile = Create(test.Index);
-                    }
-                    else
-                    {
-                        profile = new ProfileResult();
-                        profile.Name = test.Index;
-                        profile.ProfileResults = new List<ProfileResult>();
-                    }
+                    profile = Create(test.Index);
                     profile.Coeff = repository.GetCoefficientValue(index, test.Coefficient);
                     result.ProfileResults.Add(profile);   
                 }
-
             }
             return result;
         }

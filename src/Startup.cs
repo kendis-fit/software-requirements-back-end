@@ -21,6 +21,7 @@ using System.Reflection;
 
 using SoftwareRequirements.Db;
 using SoftwareRequirements.Profiles;
+using SoftwareRequirements.Services;
 
 namespace SoftwareRequirements
 {
@@ -38,11 +39,8 @@ namespace SoftwareRequirements
             services.AddCors();
             services.AddControllers();
             services.AddDbContext<ApplicationContext>(c => c.UseLazyLoadingProxies().UseNpgsql(connectionString));
-            var mappingConfig = new MapperConfiguration(c => {
-                c.AddProfile(new RequirementProfile());
-            });
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
+            services.AddMapper(new List<Profile> { new RequirementProfile() });
+            services.AddProjectRepository();
             services.AddSwaggerGen(c => 
             {
                 c.SwaggerDoc("v1", new OpenApiInfo

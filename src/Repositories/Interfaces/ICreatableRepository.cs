@@ -1,7 +1,7 @@
 namespace SoftwareRequirements.Repositories.Interfaces
 {
-    public interface ICreatableRepository<P>
+    public interface ICreatableRepository<T, P>
     {
-         void Create(P item);
+         T Create(P item);
     }
 }
