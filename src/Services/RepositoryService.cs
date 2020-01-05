@@ -11,5 +11,11 @@ namespace SoftwareRequirements.Services
             services.AddTransient<ProjectRepository>();
             return services;
         }
+
+        public static IServiceCollection AddRequirementRepository(this IServiceCollection services)
+        {
+            services.AddTransient<RequirementRepository>();
+            return services;
+        }
     }
 }

@@ -1,9 +1,7 @@
 namespace SoftwareRequirements.Models.DTO
 {
-    public class RequirementCreate
+    public class ProjectCreate
     {
         public string Name { get; set; }
-
-        public int ParentId { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -21,6 +22,48 @@ namespace SoftwareRequirements.Repositories
             FindById(nameIndex)?.Coefficients.FirstOrDefault(coeff => coeff.Name == nameCoefficient)?.Value;
 
         public float? GetMetricValue(string nameIndex, string nameMetric) =>
-            FindById(nameIndex)?.Coefficients.FirstOrDefault(coeff => coeff?.Metric.Name == nameMetric)?.Metric.Value;
+            FindById(nameIndex)?.Coefficients.FirstOrDefault(coeff => coeff?.Metric.Name == nameMetric)?.Metric?.Value;
+
+        public List<Profile> AddCoeffToI8()
+        {
+            var index = FindById("I8");
+            if (index != null)
+            {
+                var coeff = index.Coefficients.LastOrDefault();
+                string kIndex = null;
+                if (coeff != null)
+                {
+                    int firstIndexK = coeff.Name.IndexOf("K") + 1;
+                    int value = int.Parse(coeff.Name.Substring(firstIndexK)) + 1;
+
+                    kIndex = "K" + value;
+                }
+                else
+                {
+                    kIndex = "K1";
+                }
+                index.Coefficients.Add(new Coefficient
+                {
+                    Name = kIndex,
+                    Value = null
+                });
+                return profile;
+            }
+            throw new Exception("Index I8 not found");
+        }
+
+        public List<Profile> RemoveLastCoeffsI8(int count)
+        {
+            var index = FindById("I8");
+            if (index != null)
+            {
+                int lengthCoeffs = index.Coefficients.Count;
+                int lengthRemoved = count;
+
+                index.Coefficients = index.Coefficients.Take(lengthCoeffs - lengthRemoved).ToList();
+                return profile;
+            }
+            throw new Exception("Index I8 not found");
+        }
     }
 }

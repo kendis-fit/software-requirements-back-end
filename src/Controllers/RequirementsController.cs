@@ -3,12 +3,11 @@ using System;
 using System.IO;
 using AutoMapper;
 using System.Linq;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FileReader = System.IO.File;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 using SoftwareRequirements.Db;
 using SoftwareRequirements.Models.Db;
@@ -17,222 +16,99 @@ using SoftwareRequirements.Models.Profile;
 using SoftwareRequirements.Helpers.Algorithm;
 using SoftwareRequirements.Helpers.Converter;
 
+using SoftwareRequirements.Exceptions;
+using SoftwareRequirements.Repositories;
+
+
 namespace SoftwareRequirements.Controllers
 {
     [Route("[controller]")]
     public class RequirementsController : ControllerBase
     {
-        private readonly ApplicationContext db;
-        private readonly IMapper mapper;
+        private readonly RequirementRepository repository;
 
-        public RequirementsController(ApplicationContext db, IMapper mapper)
+        public RequirementsController(RequirementRepository repository)
         {
-            this.db = db;
-            this.mapper = mapper;
+            this.repository = repository;
         }
 
-        [HttpPost("{parentId}")]
-        public async Task<IActionResult> CreateRequirements(int parentId, [FromBody]RequirementCreate requirement)
+        [HttpPost] // YOU DON'T FORGET CHANGE A METHOD IN FRONT-END, YOU SHOULD SEND PARENT-ID INSIDE BODY OF REQUEST
+        public async Task<IActionResult> CreateRequirements([FromBody]RequirementCreate requirement)
         {
-            using var transaction = await db.Database.BeginTransactionAsync();
             try
             {
-                var parentRequirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == parentId);
-                if (parentRequirement == null)
-                    return NotFound();
-
-                string profile = null;
-
-                if (parentRequirement.Requirements.Count == 0 && parentRequirement.Parent != null)
-                {
-                    profile = parentRequirement.Profile;
-                    parentRequirement.Profile = null;
-                    db.Requirements.Update(parentRequirement);
-                    await db.SaveChangesAsync();
-                }
-                else
-                {
-                    profile = await FileReader.ReadAllTextAsync(Directory.GetCurrentDirectory() + "/Json/profile.json");
-                    
-                    var project = GetRoot(parentRequirement);
-
-                    string json = project.Profile;
-
-                    var projectProfile = JsonConvert.DeserializeObject<List<SoftwareRequirements.Models.Profile.Profile>>(json);
-                    var index = projectProfile.FirstOrDefault(i => i.NameIndex == "I8");
-                    if (index != null)
-                    {
-                        var coeff = index.Coefficients.LastOrDefault();
-                        string kIndex = null;
-                        if (coeff != null)
-                        {
-                            int firstIndexK = coeff.Name.IndexOf("K") + 1;
-                            int value = int.Parse(coeff.Name.Substring(firstIndexK)) + 1;
-
-                            kIndex = "K" + value;
-                        }
-                        else
-                        {
-                            kIndex = "K1";
-                        }
-                        index.Coefficients.Add(new Coefficient
-                        {
-                            Name = kIndex,
-                            Value = null
-                        });
-                    }
-                    string updateProfile = JsonConvert.SerializeObject(projectProfile);
-
-                    project.Profile = updateProfile;
-
-                    db.Requirements.Update(project);
-                    await db.SaveChangesAsync();
-                }
-
-                var newRequirement = new Requirement()
-                {
-                    Name = requirement.Name,
-                    Parent = parentRequirement,
-                    Profile = profile
-                };
-
-                await db.Requirements.AddAsync(newRequirement);
-                await db.SaveChangesAsync();
-                await transaction.CommitAsync();
-
+                var newRequirement = await repository.Create(requirement);
                 return Created($"/profiles/{newRequirement.Id}", newRequirement.Id);
             }
-            catch (Exception ex)
+            catch (RestException ex)
             {
-                await transaction.RollbackAsync();
-                return StatusCode(500);
+                return ex.SendStatusCode();
             }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRequirementById(int id)
         {
-            var requirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id);
-            if (requirement == null)
-                return NotFound();
-
-            using var transaction = await db.Database.BeginTransactionAsync();
             try
             {
-                if (requirement.ParentId == null)
-                {
-                    RemoveChildren(requirement);
-                }
-                else
-                {
-                    var project = GetRoot(requirement);
-
-                    int countRemoved = 0;
-                    RemoveChildren(requirement, ref countRemoved);
-
-                    string json = project.Profile;
-
-                    var projectProfile = JsonConvert.DeserializeObject<List<SoftwareRequirements.Models.Profile.Profile>>(json);                
-        
-                    var index = projectProfile.FirstOrDefault(i => i.NameIndex == "I8");
-                    if (index != null)
-                    {
-                        int lengthCoeffs = index.Coefficients.Count;
-                        int lengthRemoved = countRemoved;
-
-                        index.Coefficients = index.Coefficients.Take(lengthCoeffs - lengthRemoved).ToList();
-                        project.Profile = JsonConvert.SerializeObject(projectProfile);
-                    }
-                    db.Requirements.Update(project);
-                    await db.SaveChangesAsync();
-
-                }
-                await transaction.CommitAsync();
+                await repository.Remove(id);
+                return Ok();
             }
-            catch
+            catch (RestException ex)
             {
-                await transaction.RollbackAsync();
-                return StatusCode(500);
+                return ex.SendStatusCode();
             }
-            return Ok();
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateNameRequirement(int id, [FromBody]RequirementCreate requirementChange)
-        {
-            using var transaction = await db.Database.BeginTransactionAsync();
-            try
-            {
-                var requirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent != null);
-                if (requirement == null)
-                    return NotFound();
-                requirement.Name = requirementChange.Name;
+        // [HttpPatch("{id}")]
+        // public async Task<IActionResult> UpdateNameRequirement(int id, [FromBody]RequirementCreate requirementChange)
+        // {
+        //     using var transaction = await db.Database.BeginTransactionAsync();
+        //     try
+        //     {
+        //         var requirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent != null);
+        //         if (requirement == null)
+        //             return NotFound();
+        //         requirement.Name = requirementChange.Name;
 
-                db.Requirements.Update(requirement);
-                await db.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                return StatusCode(500);
-            }
-            return NoContent();
-        }
+        //         db.Requirements.Update(requirement);
+        //         await db.SaveChangesAsync();
+        //         await transaction.CommitAsync();
+        //     }
+        //     catch
+        //     {
+        //         await transaction.RollbackAsync();
+        //         return StatusCode(500);
+        //     }
+        //     return NoContent();
+        // }
 
         [HttpGet("{id}/Indexes/{indexId}")]
         public async Task<IActionResult> GetResult(int id, string indexId)
         {
-            var requirement = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent != null);
-            if (requirement == null)
-                return NotFound();
-
-            var profileListView = mapper.Map<Requirement, ProfileListView>(requirement);
-
-            var profileConverter = new ProfileConverter(profileListView, indexId);
-            var projectProfileResult = profileConverter.Convert(); 
-
-            float result = new CalculateProfile(projectProfileResult).Calculate();
-            return Ok(result);
+            try
+            {
+                float result = await repository.Calculate(id, indexId);
+                return Ok(result);
+            }
+            catch (RestException ex)
+            {
+                return ex.SendStatusCode();
+            }
         }
 
-        private void RemoveChildren(Requirement requirement)
+        [HttpGet("{id}/Diagrams/{indexId}")]
+        public async Task<IActionResult> CalculateDatasetDiagram(int id, string indexId)
         {
-            if (requirement.Requirements.Count > 0)
+            try
             {
-                foreach (var child in requirement.Requirements.ToList())
-                {
-                    RemoveChildren(child);
-                }
+                var result = await repository.ConvertToDiagram(id, indexId);
+                return Ok(result);
             }
-            db.Requirements.Remove(requirement);
-            db.SaveChanges();
-        }
-
-        private void RemoveChildren(Requirement requirement, ref int countRemoved)
-        {
-            bool isGroup() => string.IsNullOrEmpty(requirement.Profile);
-
-            if (requirement.Requirements.Count > 0)
+            catch (RestException ex)
             {
-                foreach (var child in requirement.Requirements.ToList())
-                {
-                    RemoveChildren(child, ref countRemoved);
-                }
+                return ex.SendStatusCode();
             }
-            if (!isGroup())
-            {
-                ++countRemoved;
-            }
-            db.Requirements.Remove(requirement);
-            db.SaveChanges();
-        }
-
-        private Requirement GetRoot(Requirement requirement)
-        {
-            if (requirement.Parent == null)
-                return requirement;
-            return GetRoot(requirement.Parent);
         }
     }
 }

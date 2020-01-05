@@ -1,9 +1,14 @@
-using SoftwareRequirements.Models.Db;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
+using SoftwareRequirements.Models.DTO;
 
 namespace SoftwareRequirements.Repositories.Interfaces
 {
     public interface ICalculableProfileRepository
     {
-        float Calculate(Requirement project, string indexId);    
+        Task<float> Calculate(int id, string indexId);
+
+        Task<List<ProfileRadarResult>> ConvertToDiagram(int id, string indexId);
     }
 }

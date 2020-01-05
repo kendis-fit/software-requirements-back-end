@@ -41,6 +41,7 @@ namespace SoftwareRequirements
             services.AddDbContext<ApplicationContext>(c => c.UseLazyLoadingProxies().UseNpgsql(connectionString));
             services.AddMapper(new List<Profile> { new RequirementProfile() });
             services.AddProjectRepository();
+            services.AddRequirementRepository();
             services.AddSwaggerGen(c => 
             {
                 c.SwaggerDoc("v1", new OpenApiInfo

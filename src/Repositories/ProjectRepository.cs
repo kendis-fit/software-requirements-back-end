@@ -1,25 +1,26 @@
-using System;
 using System.IO;
 using AutoMapper;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 using SoftwareRequirements.Db;
 using SoftwareRequirements.Models.Db;
 using SoftwareRequirements.Models.DTO;
+using SoftwareRequirements.Exceptions;
 using SoftwareRequirements.Helpers.Converter;
 using SoftwareRequirements.Helpers.Algorithm;
 using SoftwareRequirements.Repositories.Interfaces;
-using System.Collections.Generic;
+using SoftwareRequirements.Helpers.Converter.Structs.Result;
 
 namespace SoftwareRequirements.Repositories
 {
     public class ProjectRepository : 
         ICalculableProfileRepository,
-        ISearchableRepository<Task<Requirement>, int>,
+        ISearchableRepository<Task<RequirementView>, int>,
         ISelectableRepository<Task<List<RequirementListView>>>,
-        ICreatableRepository<Task<Requirement>,RequirementCreate>
+        ICreatableRepository<Task<Requirement>, ProjectCreate>
     {
         private readonly IMapper mapper;
         private readonly ApplicationContext db;
@@ -30,7 +31,7 @@ namespace SoftwareRequirements.Repositories
             this.mapper = mapper;
         }
 
-        public async Task<Requirement> Create(RequirementCreate project)
+        public async Task<Requirement> Create(ProjectCreate project)
         {
             var newProject = new Requirement();
 
@@ -51,39 +52,83 @@ namespace SoftwareRequirements.Repositories
             catch
             {
                 await transaction.RollbackAsync();
-                throw new Exception("DB Failed");
+                throw new ServerErrorException("DB Failed");
             }
             return newProject;
         }
 
-        public float Calculate(Requirement project, string indexId)
+        public async Task<float> Calculate(int id, string indexId)
         {
-            var profileListView = mapper.Map<Requirement, ProfileListView>(project);
+            var project = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id);
+            if (project == null)
+            {
+                throw new NotFoundException("Project not found");
+            }
 
-            var profileConverter = new ProfileConverter(profileListView, indexId);
-            var projectProfileResult = profileConverter.Convert(); 
+            var projectProfileResult = Convert(project, indexId);
 
             float result = new CalculateProfile(projectProfileResult).Calculate();
             return result;
         }
 
+        public async Task<List<ProfileRadarResult>> ConvertToDiagram(int id, string indexId)
+        {
+            var project = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id);
+            if (project == null)
+            {
+                throw new NotFoundException("Project not found");
+            }
+            var projectProfileResult = Convert(project, indexId);
+
+            var radarResults = new List<ProfileRadarResult>();
+            
+            foreach (var profileResult in projectProfileResult.ProfileResults)
+            {
+                string name = $"{profileResult.Name} ({profileResult.Coeff})";
+                float result = new CalculateProfile(profileResult).Calculate();
+                radarResults.Add(new ProfileRadarResult { Name = name, Value = result });
+            }
+            return radarResults;
+        }
+
+        private ProfileResult Convert(Requirement project, string indexId)
+        {
+            var profileListView = mapper.Map<Requirement, ProfileListView>(project);
+
+            var profileConverter = new ProfileConverter(profileListView, indexId);
+            var projectProfileResult = profileConverter.Convert();
+
+            return projectProfileResult;
+        }
+
         public async Task<List<RequirementListView>> GetAll(int offset, int size)
         {
+            if (size > 100)
+            {
+                throw new BadRequestException("Size is more than 100");
+            }
+
             var projects = await db.Requirements.Where(r => r.Parent == null).Skip(offset).Take(size).ToListAsync();
+            if (projects.Count == 0)
+            {
+                throw new NotFoundException("Projects are empty");
+            }
 
             var projectList = mapper.Map<List<Requirement>, List<RequirementListView>>(projects);
             return projectList;
         }
 
-        public async Task<Requirement> FindById(int id)
+        public async Task<RequirementView> FindById(int id)
         {
             var project = await db.Requirements.FirstOrDefaultAsync(r => r.Id == id && r.Parent == null);
 
             if (project == null)
             {
-                return null;
+                throw new NotFoundException("Project not found");
             }
-            return project;
+
+            var requirementView = mapper.Map<Requirement, RequirementView>(project);
+            return requirementView;
         }
     }
 }

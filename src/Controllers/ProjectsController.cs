@@ -1,13 +1,9 @@
-using AutoMapper;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-using SoftwareRequirements.Models.Db;
+using SoftwareRequirements.Exceptions;
 using SoftwareRequirements.Models.DTO;
 using SoftwareRequirements.Repositories;
-using SoftwareRequirements.Helpers.Algorithm;
-using SoftwareRequirements.Helpers.Converter;
-
 
 namespace SoftwareRequirements.Controllers
 {
@@ -15,56 +11,52 @@ namespace SoftwareRequirements.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly ProjectRepository repository;
-        private readonly IMapper mapper;
 
-        public ProjectsController(ProjectRepository repository, IMapper mapper)
+        public ProjectsController(ProjectRepository repository)
         {
             this.repository = repository;
-            this.mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProject([FromBody]RequirementCreate project)
+        public async Task<IActionResult> CreateProject([FromBody]ProjectCreate project)
         {
             try
             {
                 var newProject = await repository.Create(project);
                 return Created($"/profiles/{newProject.Id}", newProject.Id);
             }
-            catch
+            catch (RestException ex)
             {
-                return StatusCode(500);
+                return ex.SendStatusCode();
             }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllProjects([FromQuery]int offset, [FromQuery]int size)
         {
-            if (size > 100)
+            try
             {
-                return BadRequest();
+                var projects = await repository.GetAll(offset, size);
+                return Ok(projects);
             }
-
-            var projects = await repository.GetAll(offset, size);
-            if (projects.Count == 0)
+            catch (RestException ex)
             {
-                return NotFound();
+                return ex.SendStatusCode();
             }
-            return Ok(projects);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProjectsById(int id)
         {
-            var project = await repository.FindById(id);
-
-            if (project == null)
+            try
             {
-                return NotFound();
+                var project = await repository.FindById(id);
+                return Ok(project);
             }
-
-            var requirementView = mapper.Map<Requirement, RequirementView>(project);
-            return Ok(requirementView);
+            catch (RestException ex)
+            {
+                return ex.SendStatusCode();
+            }
         }
 
         // [HttpPatch("{id}")]
@@ -93,17 +85,29 @@ namespace SoftwareRequirements.Controllers
         [HttpGet("{id}/Indexes/{indexId}")]
         public async Task<IActionResult> CalculateResult(int id, string indexId)
         {
-            var project = await repository.FindById(id); 
-            if (project == null)
-                return NotFound();
-            
-            var profileListView = mapper.Map<Requirement, ProfileListView>(project);
+            try
+            {
+                float result = await repository.Calculate(id, indexId);
+                return Ok(result);
+            }
+            catch (RestException ex)
+            {
+                return ex.SendStatusCode();
+            }
+        }
 
-            var profileConverter = new ProfileConverter(profileListView, indexId);
-            var projectProfileResult = profileConverter.Convert(); 
-
-            float result = new CalculateProfile(projectProfileResult).Calculate();
-            return Ok(result);
+        [HttpGet("{id}/Diagrams/{indexId}")]
+        public async Task<IActionResult> CalculateDatasetDiagram(int id, string indexId)
+        {
+            try
+            {
+                var result = await repository.ConvertToDiagram(id, indexId);
+                return Ok(result);
+            }
+            catch (RestException ex)
+            {
+                return ex.SendStatusCode();
+            }
         }
     }
 }
