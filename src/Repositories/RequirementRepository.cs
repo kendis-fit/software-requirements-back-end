@@ -193,10 +193,10 @@ namespace SoftwareRequirements.Repositories
 
             var radarResults = new List<ProfileRadarResult>();
             
-            foreach (var profileResult in projectProfileResult.ProfileResults)
+            foreach (var profileResult in projectProfileResult.ProfileResults.Select((value, i) => new { value, i }))
             {
-                string name = $"{profileResult.Name} ({profileResult.Coeff})";
-                float result = new CalculateProfile(profileResult).Calculate();
+                string name = $"K{profileResult.i + 1} ({profileResult.value.Coeff})";
+                float result = new CalculateProfile(profileResult.value).Calculate();
                 radarResults.Add(new ProfileRadarResult { Name = name, Value = result });
             }
             return radarResults;
