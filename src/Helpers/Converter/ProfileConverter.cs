@@ -26,7 +26,7 @@ namespace SoftwareRequirements.Helpers.Converter
             if (Int32.TryParse(index.Replace("I", ""), out this.index.Item1))
             {
                 this.index.Item2 = index;
-                if (this.index.Item1 >= 1 || this.index.Item1 <= 8)
+                if (this.index.Item1 >= 1 && this.index.Item1 <= 8)
                 {
                     connector = new BaseConnectorProfile();
                 }
