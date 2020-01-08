@@ -12,6 +12,7 @@ using SoftwareRequirements.Exceptions;
 using SoftwareRequirements.Helpers.Converter;
 using SoftwareRequirements.Helpers.Algorithm;
 using SoftwareRequirements.Repositories.Interfaces;
+using SoftwareRequirements.Helpers.Converter.Connections;
 using SoftwareRequirements.Helpers.Converter.Structs.Result;
 
 namespace SoftwareRequirements.Repositories
@@ -81,11 +82,17 @@ namespace SoftwareRequirements.Repositories
             var projectProfileResult = Convert(project, indexId);
 
             var radarResults = new List<ProfileRadarResult>();
+
+            var connector = new BaseConnectorProfile().MakeConnect();
             
-            foreach (var profileResult in projectProfileResult.ProfileResults.Select((value, i) => new { value, i }))
+            foreach (var profileResult in projectProfileResult.ProfileResults)
             {
-                string name = $"K{profileResult.i + 1} ({profileResult.value.Coeff})";
-                float result = new CalculateProfile(profileResult.value).Calculate();
+                string profileResultName = profileResult.Name.Contains("K") ? 
+                    connector[indexId].FirstOrDefault(coeff => coeff.Coefficient == profileResult.Name).Index 
+                    : profileResult.Name;
+
+                string name = $"{profileResultName} ({profileResult.Coeff})";
+                float result = new CalculateProfile(profileResult).Calculate();
                 radarResults.Add(new ProfileRadarResult { Name = name, Value = result });
             }
             return radarResults;
