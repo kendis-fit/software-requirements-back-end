@@ -30,7 +30,7 @@ namespace SoftwareRequirements.Helpers.Algorithm
                 var results = new List<float>();
                 foreach(ProfileResult r in profileResult.ProfileResults)
                 {
-                    float result = Calculate(r);
+                    float result = Calculate(r) * (r.Value.HasValue ? 1 : r.Coeff.Value);
                     results.Add(result);
                 }
                 return results.Sum();
