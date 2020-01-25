@@ -196,15 +196,15 @@ namespace SoftwareRequirements.Repositories
             
             var connector = new ConnectorProfile().MakeConnect();
 
-            var isCoeff = projectProfileResult.ProfileResults.FirstOrDefault().Name.Contains("K");
+            var isMetric = projectProfileResult.ProfileResults.FirstOrDefault().Name.Contains("K");
 
             foreach (var profileResult in projectProfileResult.ProfileResults)
             {
-                string profileResultName = isCoeff ? 
+                string profileResultName = isMetric ? 
                     connector[indexId].FirstOrDefault(coeff => coeff.Coefficient == profileResult.Name).Index 
                     : profileResult.Name;
 
-                float? value = isCoeff ? profileResult.Coeff : profileResult.Value;
+                float? value = !isMetric ? profileResult.Coeff : profileResult.Value;
 
                 string name = $"{profileResultName} ({value})";
                 float result = new CalculateProfile(profileResult).Calculate();

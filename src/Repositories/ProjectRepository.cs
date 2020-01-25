@@ -84,12 +84,16 @@ namespace SoftwareRequirements.Repositories
             var radarResults = new List<ProfileRadarResult>();
 
             var connector = new BaseConnectorProfile().MakeConnect();
+
+            var isMetric = projectProfileResult.ProfileResults.FirstOrDefault().Name.Contains("K");
             
             foreach (var profileResult in projectProfileResult.ProfileResults)
             {
-                string profileResultName = profileResult.Name.Contains("K") ? 
+                string profileResultName = isMetric ? 
                     connector[indexId].FirstOrDefault(coeff => coeff.Coefficient == profileResult.Name).Index 
                     : profileResult.Name;
+
+                float? value = !isMetric ? profileResult.Coeff : profileResult.Value;
 
                 string name = $"{profileResultName} ({profileResult.Coeff})";
                 float result = new CalculateProfile(profileResult).Calculate();
