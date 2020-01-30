@@ -2,6 +2,7 @@
     {
         "NameIndex": "I1",
         "Name": "SRPQGI",
+        "Description": "Software requirements profile quality generalized index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -16,6 +17,7 @@
     {
         "NameIndex": "I2",
         "Name": "SRPEQGI",
+        "Description": "Software requirements profile external quality generalized index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -42,6 +44,7 @@
     {
         "NameIndex": "I3",
         "Name": "SRPSQI",
+        "Description": "Software requirements profile structure quality index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -86,6 +89,7 @@
     {
         "NameIndex": "I4",
         "Name": "SRPCQI",
+        "Description": "Software requirements profile characteristics quality index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -165,6 +169,7 @@
     {
         "NameIndex": "I5",
         "Name": "SRPCFCQI",
+        "Description": "Software requirements profile classification features characteristics quality index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -226,6 +231,7 @@
     {
         "NameIndex": "I6",
         "Name": "SRPAQI",
+        "Description": "Software requirements profile attributes quality index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -278,6 +284,7 @@
     {
         "NameIndex": "I7",
         "Name": "SRPCFAQI",
+        "Description": "Software requirements profile classification features attributes quality index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -321,6 +328,7 @@
     {
         "NameIndex": "I8",
         "Name": "SRPIQGI",
+        "Description": "Software requirements profile internal quality generalized index",
         "Coefficients": []
     }
 ]

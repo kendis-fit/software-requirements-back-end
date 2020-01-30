@@ -2,6 +2,7 @@
     {
         "NameIndex": "I9",
         "Name": "SRPQIRGI",
+        "Description": "Software requirements profile quality individual requirement generalized index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -16,6 +17,7 @@
     {
         "NameIndex": "I10",
         "Name": "SRPEQIRGI",
+        "Description": "Software requirements profile external quality individual requirement generalized index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -38,6 +40,7 @@
     {
         "NameIndex": "I11",
         "Name": "SRPCQIRI",
+        "Description": "Software requirements profile characteristics quality individual requirement index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -244,6 +247,7 @@
     {
         "NameIndex": "I12",
         "Name": "SRPCFCQIRI",
+        "Description": "Software requirements profile classification feature characteristics quality individual requirement index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -323,6 +327,7 @@
     {
         "NameIndex": "I13",
         "Name": "SRPAQIRI",
+        "Description": "Software requirements profile attributes quality individual requirement index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -440,6 +445,7 @@
     {
         "NameIndex": "I14",
         "Name": "SRPCFAQIRI",
+        "Description": "Software requirements profile classification feature attributes quality individual requirement index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -492,6 +498,7 @@
     {
         "NameIndex": "I15",
         "Name": "SRPIQIRGI",
+        "Description": "Software requirements profile internal quality individual requirement generalized index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -506,6 +513,7 @@
     {
         "NameIndex": "I16",
         "Name": "SRPSQIRI",
+        "Description": "Software requirements profile syntax quality individual requirement index",
         "Coefficients": [
             {
                 "Name": "K1",
@@ -557,6 +565,7 @@
     {
         "NameIndex": "I17",
         "Name": "SRPSEQIRI",
+        "Description": "Software requirements profile semantics quality individual requirement index",
         "Coefficients": [
             {
                 "Name": "K1",
