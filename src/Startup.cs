@@ -57,15 +57,15 @@ namespace SoftwareRequirements
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //if (env.IsDevelopment())
-            //{
-                //app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Software Requirements Api");
                 });
-            //}
+            }
 
             app.UseStaticFiles(new StaticFileOptions
             {
