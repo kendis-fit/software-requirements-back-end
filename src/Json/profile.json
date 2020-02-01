@@ -48,7 +48,8 @@
                 "Metric": {
                     "Name": "M22",
                     "NameMetric": "SRPSRAC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement accuracy characteristic"
                 }
             },
             {
@@ -57,7 +58,8 @@
                 "Metric": {
                     "Name": "M23",
                     "NameMetric": "SRPSRCC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement completeness characteristic"
                 }
             },
             {
@@ -66,7 +68,8 @@
                 "Metric": {
                     "Name": "M24",
                     "NameMetric": "SRPSRCOC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement consistency characteristic"
                 }
             },
             {
@@ -75,7 +78,8 @@
                 "Metric": {
                     "Name": "M25",
                     "NameMetric": "SRPSRCRC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement credibility characteristic"
                 }
             },
             {
@@ -84,7 +88,8 @@
                 "Metric": {
                     "Name": "M26",
                     "NameMetric": "SRPSRCUC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement currentness characteristic"
                 }
             },
             {
@@ -93,7 +98,8 @@
                 "Metric": {
                     "Name": "M27",
                     "NameMetric": "SRPSRACC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement accessibility characteristic"
                 }
             },
             {
@@ -102,7 +108,8 @@
                 "Metric": {
                     "Name": "M28",
                     "NameMetric": "SRPSRACOMC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement compliance characteristic"
                 }
             },
             {
@@ -111,7 +118,8 @@
                 "Metric": {
                     "Name": "M29",
                     "NameMetric": "SRPSRACONC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement confidentiality characteristic"
                 }
             },
             {
@@ -120,7 +128,8 @@
                 "Metric": {
                     "Name": "M30",
                     "NameMetric": "SRPSRTC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement traceability characteristic"
                 }
             },
             {
@@ -129,7 +138,8 @@
                 "Metric": {
                     "Name": "M31",
                     "NameMetric": "SRPSRUC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement understandability characteristic"
                 }
             },
             {
@@ -138,7 +148,8 @@
                 "Metric": {
                     "Name": "M32",
                     "NameMetric": "SRPSRNC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement necessary characteristic"
                 }
             },
             {
@@ -147,7 +158,8 @@
                 "Metric": {
                     "Name": "M33",
                     "NameMetric": "SRPSRIFC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement implementation free characteristic"
                 }
             },
             {
@@ -156,7 +168,8 @@
                 "Metric": {
                     "Name": "M34",
                     "NameMetric": "SRPSUNC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement unambiguous characteristic"
                 }
             },
             {
@@ -165,7 +178,8 @@
                 "Metric": {
                     "Name": "M35",
                     "NameMetric": "SRPSRSH",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement singular characteristic"
                 }
             },
             {
@@ -174,7 +188,8 @@
                 "Metric": {
                     "Name": "M36",
                     "NameMetric": "SRPSRFH",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement feasible characteristic"
                 }
             },
             {
@@ -183,7 +198,8 @@
                 "Metric": {
                     "Name": "M37",
                     "NameMetric": "SRPSRVH",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement verifiable characteristic"
                 }
             },
             {
@@ -192,7 +208,8 @@
                 "Metric": {
                     "Name": "M38",
                     "NameMetric": "SRPSRAH",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement appropriate characteristic"
                 }
             },
             {
@@ -201,7 +218,8 @@
                 "Metric": {
                     "Name": "M39",
                     "NameMetric": "SRPSRCORC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement correct characteristic"
                 }
             },
             {
@@ -211,14 +229,17 @@
                     "Name": "M40",
                     "NameMetric": "SRPSRCC",
                     "Value": null,
+                    "Description": "software requirements profile software requirement conforming characteristic",
                     "Primitives": [
                         {
                             "Name": "REQCGSP",
-                            "Value": null
+                            "Value": null,
+                            "Description": "requirement elements quantity conforming for general spelling pattern"
                         },
                         {
                             "Name": "GQRE",
-                            "Value": null
+                            "Value": null,
+                            "Description": "general quantity of requirement elements"
                         }
                     ]
                 }
@@ -230,14 +251,17 @@
                     "Name": "M41",
                     "NameMetric": "SRPSRCQ",
                     "Value": null,
+                    "Description": "software requirements profile software requirement characteristics quality",
                     "Primitives": [
                         {
                             "Name": "SRPSRPCQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "software requirements profile software requirement performed characteristics quantity"
                         },
                         {
                             "Name": "SRPSRACQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "software requirements profile software requirement all characteristics quantity"
                         }
                     ]
                 }
@@ -255,7 +279,8 @@
                 "Metric": {
                     "Name": "M42",
                     "NameMetric": "SRPSRCFEC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement classification feature evidence characteristic"
                 }
             },
             {
@@ -264,7 +289,8 @@
                 "Metric": {
                     "Name": "M43",
                     "NameMetric": "SRPSRCFSC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement classification feature stability characteristic"
                 }
             },
             {
@@ -273,7 +299,8 @@
                 "Metric": {
                     "Name": "M44",
                     "NameMetric": "SRPSRCFAC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement classification feature accuracy characteristic"
                 }
             },
             {
@@ -282,7 +309,8 @@
                 "Metric": {
                     "Name": "M45",
                     "NameMetric": "SRPSRCFCC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement classification feature compliance characteristic"
                 }
             },
             {
@@ -291,7 +319,8 @@
                 "Metric": {
                     "Name": "M46",
                     "NameMetric": "SRPSRCFUC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement classification feature understandability characteristic"
                 }
             },
             {
@@ -300,7 +329,8 @@
                 "Metric": {
                     "Name": "M47",
                     "NameMetric": "SRPSRCFUNC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement classification feature univocacy characteristic"
                 }
             },
             {
@@ -310,14 +340,17 @@
                     "Name": "M48",
                     "NameMetric": "SRPCFSRCQ",
                     "Value": null,
+                    "Description": "software requirements profile classification feature software requirement characteristics quality",
                     "Primitives": [
                         {
                             "Name": "SRPCFSRPCQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "software requirements profile classification feature software requirement performed characteristics quantity"
                         },
                         {
                             "Name": "SRPCFSRACQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "software requirements profile classification feature software requirement all characteristics quantity"
                         }
                     ]
                 }
@@ -335,7 +368,8 @@
                 "Metric": {
                     "Name": "M49",
                     "NameMetric": "SRPSRCFUNC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement identification attribute"
                 }
             },
             {
@@ -345,14 +379,17 @@
                     "Name": "M50",
                     "NameMetric": "SRPSRSPA",
                     "Value": null,
+                    "Description": "software requirements profile software requirement stakeholder priority attribute",
                     "Primitives": [
                         {
                             "Name": "RSQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "requirement stakeholder quantity"
                         },
                         {
                             "Name": "PSGQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "project stakeholder general quantity"
                         }
                     ]
                 }
@@ -364,14 +401,17 @@
                     "Name": "M51",
                     "NameMetric": "SRPSRRAA",
                     "Value": null,
+                    "Description": "software requirements profile software requirement risks assessment attribute",
                     "Primitives": [
                         {
                             "Name": "RRQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "requirement risks quantity,"
                         },
                         {
                             "Name": "RRGQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "project stakeholder general quantity"
                         }
                     ]
                 }
@@ -382,7 +422,8 @@
                 "Metric": {
                     "Name": "M52",
                     "NameMetric": "SRPSRCFUNC",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement source attribute"
                 }
             },
             {
@@ -391,7 +432,8 @@
                 "Metric": {
                     "Name": "M53",
                     "NameMetric": "SRPSRRA",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement rationale attribute"
                 }
             },
             {
@@ -400,7 +442,8 @@
                 "Metric": {
                     "Name": "M54",
                     "NameMetric": "SRPSRDA",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement difficulty attribute"
                 }
             },
             {
@@ -409,7 +452,8 @@
                 "Metric": {
                     "Name": "M55",
                     "NameMetric": "SRPSRTA",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement type attribute"
                 }
             },
             {
@@ -418,7 +462,8 @@
                 "Metric": {
                     "Name": "M56",
                     "NameMetric": "SRPSRVNA",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement version number attribute"
                 }
             },
             {
@@ -428,14 +473,17 @@
                     "Name": "M57",
                     "NameMetric": "SRPSRAQ",
                     "Value": null,
+                    "Description": "software requirements profile software requirement attributes quality",
                     "Primitives": [
                         {
                             "Name": "SRPSRPAQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "software requirements profile software requirement performed attributes quantity"
                         },
                         {
                             "Name": "SRPSRAAQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "software requirements profile software requirement all attributes quantity"
                         }
                     ]
                 }
@@ -453,7 +501,8 @@
                 "Metric": {
                     "Name": "M58",
                     "NameMetric": "SRPSRCFTSTA",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement classification feature taxonomic structure type attribute"
                 }
             },
             {
@@ -462,7 +511,8 @@
                 "Metric": {
                     "Name": "M59",
                     "NameMetric": "SRPSRCFIA",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement classification feature identification attribute"
                 }
             },
             {
@@ -471,7 +521,8 @@
                 "Metric": {
                     "Name": "M60",
                     "NameMetric": "SRPSRCFDA",
-                    "Value": null
+                    "Value": null,
+                    "Description": "software requirements profile software requirement classification feature dependency attribute"
                 }
             },
             {
@@ -481,14 +532,17 @@
                     "Name": "M61",
                     "NameMetric": "SRPSRCFAQ",
                     "Value": null,
+                    "Description": "software requirements profile software requirement classification features attributes quality",
                     "Primitives": [
                         {
                             "Name": "SRPSRCFPAQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "software requirements profile software requirement classification features performed attributes quantity"
                         },
                         {
                             "Name": "SRPSRCFAAQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "software requirements profile software requirement classification features all attributes quantity"
                         }
                     ]
                 }
@@ -522,10 +576,12 @@
                     "Name": "M62",
                     "NameMetric": "SRPSRSSPE",
                     "Value": null,
+                    "Description": "software requirements profile software requirement syntactical structure permanent elements",
                     "Primitives": [
                         {
                             "Name": "RPSSEQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "requirement permanent syntactical structure elements quantity"
                         }
                     ]
                 }
@@ -537,10 +593,12 @@
                     "Name": "M63",
                     "NameMetric": "SRPSRSSVE",
                     "Value": null,
+                    "Description": "software requirements profile software requirement syntactical structure variable elements",
                     "Primitives": [
                         {
                             "Name": "RVSSEQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "requirement variable syntactical structure elements quantity"
                         }
                     ]
                 }
@@ -552,10 +610,12 @@
                     "Name": "M64",
                     "NameMetric": "SRPSRSSAE",
                     "Value": null,
+                    "Description": "software requirements profile software requirement syntactical structure all elements",
                     "Primitives": [
                         {
                             "Name": "RASSEQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "requirement all syntactical structure elements quantity"
                         }
                     ]
                 }
@@ -574,10 +634,12 @@
                     "Name": "M65",
                     "NameMetric": "SRPSRMSS",
                     "Value": null,
+                    "Description": "software requirements profile software requirement mandatory semantic structures",
                     "Primitives": [
                         {
                             "Name": "MSSQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "mandatory semantic structures quantity"
                         }
                     ]
                 }
@@ -589,10 +651,12 @@
                     "Name": "M66",
                     "NameMetric": "SRPSRASS",
                     "Value": null,
+                    "Description": "software requirements profile software requirement admissible semantic structures",
                     "Primitives": [
                         {
                             "Name": "ASSQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "mandatory semantic structures quantity"
                         }
                     ]
                 }
@@ -604,10 +668,12 @@
                     "Name": "M67",
                     "NameMetric": "SRPSRUSS",
                     "Value": null,
+                    "Description": "software requirements profile software requirement undesirable semantic structures",
                     "Primitives": [
                         {
                             "Name": "USSQ",
-                            "Value": null
+                            "Value": null,
+                            "Description": "undesirable semantic structures quantity"
                         }
                     ]
                 }
