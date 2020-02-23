@@ -53,7 +53,7 @@
                     "Name": "M1",
                     "NameMetric": "SRPTN",
                     "Value": null,
-                    "Description": "software requirements profile taxons number",
+                    "Description": "software requirements profile taxons number\nFormula: SRPTN = SRPTRN / SRPTRQN\nPrimitives: SRPTRN, SRPTRQN",
                     "Primitives": [
                         {
                             "Name": "SRPTRN",
@@ -75,7 +75,7 @@
                     "Name": "M2",
                     "NameMetric": "SRPCFN",
                     "Value": null,
-                    "Description": "software requirements profile classification features number",
+                    "Description": "software requirements profile classification features number\nFormula: SRPCFN= SRPCFRN / SRPCFRQN\nPrimitives: SRPCFRN, SRPCFRQN",
                     "Primitives": [
                         {
                             "Name": "SRPCFRN",
@@ -164,7 +164,7 @@
                     "Name": "M9",
                     "NameMetric": "SRPCQ",
                     "Value": null,
-                    "Description": "software requirements profile characteristics quality",
+                    "Description": "software requirements profile characteristics quality\nFormula: SRPCQ = SRPPCQ / SRPACQ\nPrimitives: SRPPCQ, SRPACQ",
                     "Primitives": [
                         {
                             "Name": "SRPPCQ",
@@ -233,7 +233,7 @@
                     "Name": "M14",
                     "NameMetric": "SRPCFCQ",
                     "Value": null,
-                    "Description": "software requirements profile classification features characteristics quality",
+                    "Description": "software requirements profile classification features characteristics quality\nFormula: SRPCFCQ= SRPCFPCQ / SRPCFACQ\nPrimitives: SRPCFPCQ, SRPCFACQ",
                     "Primitives": [
                         {
                             "Name": "SRPCFPCQ",
@@ -292,7 +292,7 @@
                     "Name": "M18",
                     "NameMetric": "SRPAQ",
                     "Value": null,
-                    "Description": "software requirements profile attributes quality",
+                    "Description": "software requirements profile attributes quality\nFormula: SRPAQ = SRPPAQ / SRPAAQ\nPrimitives: SRPPAQ, SRPAAQ",
                     "Primitives": [
                         {
                             "Name": "SRPPAQ",
@@ -341,7 +341,7 @@
                     "Name": "M21",
                     "NameMetric": "SRPCFAQ",
                     "Value": null,
-                    "Description": "software requirements profile classification features attributes quality",
+                    "Description": "software requirements profile classification features attributes quality\nFormula: SRPCFAQ = SRPCFPAQ / SRPCFAAQ\nPrimitives: SRPCFPAQ, SRPCFAAQ",
                     "Primitives": [
                         {
                             "Name": "SRPCFPAQ",

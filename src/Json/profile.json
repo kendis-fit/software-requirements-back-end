@@ -229,7 +229,7 @@
                     "Name": "M40",
                     "NameMetric": "SRPSRCC",
                     "Value": null,
-                    "Description": "software requirements profile software requirement conforming characteristic",
+                    "Description": "software requirements profile software requirement conforming characteristic\nFormula: SRPSRCC  = REQCGSP / GQRE\nPrimitives: REQCGSP, GQRE",
                     "Primitives": [
                         {
                             "Name": "REQCGSP",
@@ -251,7 +251,7 @@
                     "Name": "M41",
                     "NameMetric": "SRPSRCQ",
                     "Value": null,
-                    "Description": "software requirements profile software requirement characteristics quality",
+                    "Description": "software requirements profile software requirement characteristics quality\nFormula: SRPSRCQ = SRPSRPCQ / SRPSRACQ\nPrimitives: SRPSRPCQ, SRPSRACQ",
                     "Primitives": [
                         {
                             "Name": "SRPSRPCQ",
@@ -340,7 +340,7 @@
                     "Name": "M48",
                     "NameMetric": "SRPCFSRCQ",
                     "Value": null,
-                    "Description": "software requirements profile classification feature software requirement characteristics quality",
+                    "Description": "software requirements profile classification feature software requirement characteristics quality\nFormula: SRPCFSRCQ = SRPCFSRPCQ / SRPCFSRACQ\nPrimitives: SRPCFSRPCQ, SRPCFSRACQ",
                     "Primitives": [
                         {
                             "Name": "SRPCFSRPCQ",
@@ -379,7 +379,7 @@
                     "Name": "M50",
                     "NameMetric": "SRPSRSPA",
                     "Value": null,
-                    "Description": "software requirements profile software requirement stakeholder priority attribute",
+                    "Description": "software requirements profile software requirement stakeholder priority attribute\nFormula: SRPSRSPA = RSQ / PSGQ\nPrimitives: RSQ, RSGQ",
                     "Primitives": [
                         {
                             "Name": "RSQ",
@@ -401,7 +401,7 @@
                     "Name": "M51",
                     "NameMetric": "SRPSRRAA",
                     "Value": null,
-                    "Description": "software requirements profile software requirement risks assessment attribute",
+                    "Description": "software requirements profile software requirement risks assessment attribute\nFormula: SRPSRRAA = RRQ /  RRGQ\nPrimitives: RRQ, RRGQ",
                     "Primitives": [
                         {
                             "Name": "RRQ",
@@ -473,7 +473,7 @@
                     "Name": "M57",
                     "NameMetric": "SRPSRAQ",
                     "Value": null,
-                    "Description": "software requirements profile software requirement attributes quality",
+                    "Description": "software requirements profile software requirement attributes quality\nFormula: SRPSRAQ = SRPSRPAQ / SRPSRAAQ\nPrimitives: SRPSRPAQ, SRPSRAAQ",
                     "Primitives": [
                         {
                             "Name": "SRPSRPAQ",
@@ -532,7 +532,7 @@
                     "Name": "M61",
                     "NameMetric": "SRPSRCFAQ",
                     "Value": null,
-                    "Description": "software requirements profile software requirement classification features attributes quality",
+                    "Description": "software requirements profile software requirement classification features attributes quality\nFormula: SRPSRCFAQ = SRPSRCFPAQ / SRPSRCFAAQ\nPrimitives: SRPSRCFPAQ, SRPSRCFAAQ",
                     "Primitives": [
                         {
                             "Name": "SRPSRCFPAQ",
@@ -576,7 +576,7 @@
                     "Name": "M62",
                     "NameMetric": "SRPSRSSPE",
                     "Value": null,
-                    "Description": "software requirements profile software requirement syntactical structure permanent elements",
+                    "Description": "software requirements profile software requirement syntactical structure permanent elements\nFormula: SRPSRSSPE = RPSSEQ / 2\nPrimitives: RPSSEQ",
                     "Primitives": [
                         {
                             "Name": "RPSSEQ",
@@ -593,7 +593,7 @@
                     "Name": "M63",
                     "NameMetric": "SRPSRSSVE",
                     "Value": null,
-                    "Description": "software requirements profile software requirement syntactical structure variable elements",
+                    "Description": "software requirements profile software requirement syntactical structure variable elements\nFormula: SRPSRSSVE = 1/1+ RVSSEQ\nPrimitives: RVSSEQ",
                     "Primitives": [
                         {
                             "Name": "RVSSEQ",
@@ -610,7 +610,7 @@
                     "Name": "M64",
                     "NameMetric": "SRPSRSSAE",
                     "Value": null,
-                    "Description": "software requirements profile software requirement syntactical structure all elements",
+                    "Description": "software requirements profile software requirement syntactical structure all elements\nFormula: SRPSRSSAE = RASSEQ / 6\nPrimitives: RASSEQ",
                     "Primitives": [
                         {
                             "Name": "RASSEQ",
@@ -634,7 +634,7 @@
                     "Name": "M65",
                     "NameMetric": "SRPSRMSS",
                     "Value": null,
-                    "Description": "software requirements profile software requirement mandatory semantic structures",
+                    "Description": "software requirements profile software requirement mandatory semantic structures\nFormula: SRPSRMSS  = 1 / MSSQ\nPrimitives: MSSQ",
                     "Primitives": [
                         {
                             "Name": "MSSQ",
@@ -651,7 +651,7 @@
                     "Name": "M66",
                     "NameMetric": "SRPSRASS",
                     "Value": null,
-                    "Description": "software requirements profile software requirement admissible semantic structures",
+                    "Description": "software requirements profile software requirement admissible semantic structures\nFormula: SRPSRASS = 1 - 1 / (1 + 1/ ASSQ)\nPrimitives: ASSQ",
                     "Primitives": [
                         {
                             "Name": "ASSQ",
@@ -668,7 +668,7 @@
                     "Name": "M67",
                     "NameMetric": "SRPSRUSS",
                     "Value": null,
-                    "Description": "software requirements profile software requirement undesirable semantic structures",
+                    "Description": "software requirements profile software requirement undesirable semantic structures\nFormula: SRPSRUSS = 1 - USSQ\nPrimitives: USSQ",
                     "Primitives": [
                         {
                             "Name": "USSQ",
