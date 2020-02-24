@@ -72,6 +72,19 @@ namespace SoftwareRequirements.Helpers.Converter
             return result;
         }
 
+        private void SortInDepth(ref RequirementView view)
+        {
+            if (view.Requirements != null && view.Requirements.Count() != 0)
+            {
+                view.Requirements = view.Requirements.OrderBy(r => r.Id).ToList();
+                foreach (var item in view.Requirements)
+                {
+                    var test = item;
+                    SortInDepth(ref test);
+                }
+            }
+        }
+
         private void GetRequiremetProfile(ProfileListView listView, int index, ref int count, ref List<Profile> profile)
         {
             if (index == count)

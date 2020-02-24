@@ -79,6 +79,7 @@ namespace SoftwareRequirements.Repositories
             {
                 throw new NotFoundException("Project not found");
             }
+            SortInDepth(ref project);
             var projectProfileResult = Convert(project, indexId);
 
             var radarResults = new List<ProfileRadarResult>();
@@ -137,9 +138,23 @@ namespace SoftwareRequirements.Repositories
             {
                 throw new NotFoundException("Project not found");
             }
+            SortInDepth(ref project);
 
             var requirementView = mapper.Map<Requirement, RequirementView>(project);
             return requirementView;
+        }
+
+        private void SortInDepth(ref Requirement view)
+        {
+            if (view.Requirements != null && view.Requirements.Count() != 0)
+            {
+                view.Requirements = view.Requirements.OrderBy(r => r.Id).ToList();
+                foreach (var item in view.Requirements)
+                {
+                    var test = item;
+                    SortInDepth(ref test);
+                }
+            }
         }
     }
 }
